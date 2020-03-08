@@ -312,7 +312,7 @@
   // If non selected the default en-GB will be used
 //#define MY_LANGUAGE            bg-BG           // Bulgarian in Bulgaria
 //#define MY_LANGUAGE            cs-CZ           // Czech in Czech
-//#define MY_LANGUAGE            de-DE           // German in Germany
+#define MY_LANGUAGE            de-DE           // German in Germany
 //#define MY_LANGUAGE            el-GR           // Greek in Greece
 //#define MY_LANGUAGE            en-GB           // English in Great Britain. Enabled by Default
 //#define MY_LANGUAGE            es-ES           // Spanish in Spain
