@@ -401,13 +401,13 @@
   #define D_DOMOTICZ_TEMP "Temp"
   #define D_DOMOTICZ_TEMP_HUM "Temp,Hum"
   #define D_DOMOTICZ_TEMP_HUM_BARO "Temp,Hum,Baro"
-  #define D_DOMOTICZ_POWER_ENERGY "Power,Energy"
-  #define D_DOMOTICZ_ILLUMINANCE "Illuminance"
-  #define D_DOMOTICZ_COUNT "Count/PM1"
+  #define D_DOMOTICZ_POWER_ENERGY "Power,Energy-Strom1"
+  #define D_DOMOTICZ_ILLUMINANCE "Water-Count"
+  #define D_DOMOTICZ_COUNT "Count/PM1-Gas"
   #define D_DOMOTICZ_VOLTAGE "Voltage/PM2.5"
   #define D_DOMOTICZ_CURRENT "Current/PM10"
   #define D_DOMOTICZ_AIRQUALITY "AirQuality"
-  #define D_DOMOTICZ_P1_SMART_METER "P1SmartMeter"
+  #define D_DOMOTICZ_P1_SMART_METER "P1SM-Strom2"
 #define D_DOMOTICZ_UPDATE_TIMER "Update Zeitplan"
 
 // xdrv_09_timers.ino

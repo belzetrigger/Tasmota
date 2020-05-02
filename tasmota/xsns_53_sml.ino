@@ -1899,16 +1899,29 @@ void SML_Show(boolean json) {
     }
     else
     {
-      AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Skip sending to Domoticz. Value is 0 or NULL."));
+      AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Skip sending power to Domoticz. Value is 0 or NULL."));
     }
-#if METER == EHZ_I_GAS
+// -------------- GAS
+#if METER == EHZ_I_GAS || METER == EHZ_I_GAS_H2O
     char gasCounter[16];
     dtostrfd(meter_vars[3], 1, gasCounter);
     AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Gas "), gasCounter );
     //DomoticzSensor(DZ_COUNT, gasCounter); // miss usePM1
     char data[64];
-    snprintf_P(data, sizeof(data), PSTR("%s;;;;;"), gasCounter);
+    //TODO what should we use for gas? counter? p1 gas? 
+    snprintf_P(data, sizeof(data), PSTR("%s;0;0;0;0;0"), gasCounter);
     DomoticzSensor(DZ_COUNT, data); 
+#endif
+// ------------- H2O
+#if METER == EHZ_I_GAS_H2O
+    char waterCounter[16];
+    dtostrfd(meter_vars[4], 1, waterCounter);
+    AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Water "), waterCounter );
+    
+    //TODO what should we use for gas? counter? p1 gas? 
+    // miss use of D_DOMOTICZ_ILLUMINANCE for water
+    snprintf_P(data, sizeof(data), PSTR("%s"), waterCounter);
+    DomoticzSensor(DZ_ILLUMINANCE, data); 
 #endif
     /*
     dtostrfd(meter_vars[0], 1, str);
