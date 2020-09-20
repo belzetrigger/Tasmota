@@ -1903,6 +1903,7 @@ void SML_Show(boolean json) {
     }
 // -------------- GAS
 #if METER == EHZ_I_GAS || METER == EHZ_I_GAS_H2O
+    double dGas = meter_vars[3];
     char gasCounter[16];
     dtostrfd(meter_vars[3], 1, gasCounter);
     AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Gas "), gasCounter );
@@ -1914,11 +1915,12 @@ void SML_Show(boolean json) {
 #endif
 // ------------- H2O
 #if METER == EHZ_I_GAS_H2O
+    double dWater = meter_vars[4];
     char waterCounter[16];
     dtostrfd(meter_vars[4], 1, waterCounter);
     AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Water "), waterCounter );
     
-    //TODO what should we use for gas? counter? p1 gas? 
+    //TODO what should we use for water?  
     // miss use of D_DOMOTICZ_ILLUMINANCE for water
     snprintf_P(data, sizeof(data), PSTR("%s"), waterCounter);
     DomoticzSensor(DZ_ILLUMINANCE, data); 
