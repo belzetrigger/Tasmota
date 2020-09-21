@@ -1,5 +1,5 @@
 /*
-  tasmota_template_ESP32.h - template settings for Tasmota
+  tasmota_template_ESP32.h - ESP32 template settings for Tasmota
 
   Copyright (C) 2020  Theo Arends
 
@@ -36,189 +36,107 @@
 
 // Not ported (yet)
 #undef USE_DISCOVERY
-#undef USE_ADC_VCC    // Needs to be ported
-#undef USE_DEEPSLEEP
 #undef USE_MY92X1
 #undef USE_TUYA_MCU
 #undef USE_PS_16_DZ
 
 enum UserSelectablePins {
-  GPIO_NONE,           // Not used
-  GPIO_KEY1,           // 4 x Button usually connected to GPIO0
-  GPIO_KEY1_NP,
-  GPIO_KEY1_INV,
-  GPIO_KEY1_INV_NP,
-  GPIO_SWT1,           // 8 x User connected external switches
-  GPIO_SWT1_NP,
-  GPIO_REL1,           // 8 x Relays
-  GPIO_REL1_INV,
-  GPIO_LED1,           // 4 x Leds
-  GPIO_LED1_INV,
-  GPIO_CNTR1,          // 4 x Counter
-  GPIO_CNTR1_NP,
-  GPIO_PWM1,           // 5 x PWM
-  GPIO_PWM1_INV,
-  GPIO_BUZZER,         // Buzzer
-  GPIO_BUZZER_INV,     // Inverted buzzer
-  GPIO_LEDLNK,         // Link led
-  GPIO_LEDLNK_INV,     // Inverted link led
-  GPIO_I2C_SCL,        // I2C SCL
-  GPIO_I2C_SDA,        // I2C SDA
-  GPIO_SPI_MISO,       // SPI MISO
-  GPIO_SPI_MOSI,       // SPI MOSI
-  GPIO_SPI_CLK,        // SPI Clk
-  GPIO_SPI_CS,         // SPI Chip Select
-  GPIO_SPI_DC,         // SPI Data Direction
-  GPIO_SSPI_MISO,      // Software SPI Master Input Slave Output
-  GPIO_SSPI_MOSI,      // Software SPI Master Output Slave Input
-  GPIO_SSPI_SCLK,      // Software SPI Serial Clock
-  GPIO_SSPI_CS,        // Software SPI Chip Select
-  GPIO_SSPI_DC,        // Software SPI Data or Command
-  GPIO_BACKLIGHT,      // Display backlight control
-  GPIO_OLED_RESET,     // OLED Display Reset
-  GPIO_IRSEND,         // IR remote
-  GPIO_IRRECV,         // IR receiver
-  GPIO_RFSEND,         // RF transmitter
-  GPIO_RFRECV,         // RF receiver
-  GPIO_DHT11,          // DHT11
-  GPIO_DHT22,          // DHT21, DHT22, AM2301, AM2302, AM2321
-  GPIO_SI7021,         // iTead SI7021
-  GPIO_DHT11_OUT,      // Pseudo Single wire DHT11, DHT21, DHT22, AM2301, AM2302, AM2321
-  GPIO_DSB,            // Single wire DS18B20 or DS18S20
-  GPIO_DSB_OUT,        // Pseudo Single wire DS18B20 or DS18S20
-  GPIO_WS2812,         // WS2812 Led string
-  GPIO_MHZ_TXD,        // MH-Z19 Serial interface
-  GPIO_MHZ_RXD,        // MH-Z19 Serial interface
-  GPIO_PZEM0XX_TX,     // PZEM0XX Serial interface
-  GPIO_PZEM004_RX,     // PZEM004T Serial interface
-  GPIO_PZEM016_RX,     // PZEM-014,016 Serial Modbus interface
-  GPIO_PZEM017_RX,     // PZEM-003,017 Serial Modbus interface
-  GPIO_SAIR_TX,        // SenseAir Serial interface
-  GPIO_SAIR_RX,        // SenseAir Serial interface
-  GPIO_PMS5003_TX,     // Plantower PMS5003 Serial interface
-  GPIO_PMS5003_RX,     // Plantower PMS5003 Serial interface
-  GPIO_SDS0X1_TX,      // Nova Fitness SDS011 Serial interface
-  GPIO_SDS0X1_RX,      // Nova Fitness SDS011 Serial interface
-  GPIO_SBR_TX,         // Serial Bridge Serial interface
-  GPIO_SBR_RX,         // Serial Bridge Serial interface
-  GPIO_SR04_TRIG,      // SR04 Trigger/TX pin
-  GPIO_SR04_ECHO,      // SR04 Echo/RX pin
-  GPIO_SDM120_TX,      // SDM120 Serial interface
-  GPIO_SDM120_RX,      // SDM120 Serial interface
-  GPIO_SDM630_TX,      // SDM630 Serial interface
-  GPIO_SDM630_RX,      // SDM630 Serial interface
-  GPIO_TM16CLK,        // TM1638 Clock
-  GPIO_TM16DIO,        // TM1638 Data I/O
-  GPIO_TM16STB,        // TM1638 Strobe
-  GPIO_MP3_DFR562,     // RB-DFR-562, DFPlayer Mini MP3 Player
-  GPIO_HX711_SCK,      // HX711 Load Cell clock
-  GPIO_HX711_DAT,      // HX711 Load Cell data
-  GPIO_TX2X_TXD_BLACK, // TX20/TX23 Transmission Pin
-  GPIO_TUYA_TX,        // Tuya Serial interface
-  GPIO_TUYA_RX,        // Tuya Serial interface
-  GPIO_MGC3130_XFER,   // MGC3130 Transfer
-  GPIO_MGC3130_RESET,  // MGC3130 Reset
-  GPIO_RF_SENSOR,      // Rf receiver with sensor decoding
-  GPIO_AZ_TXD,         // AZ-Instrument 7798 Serial interface
-  GPIO_AZ_RXD,         // AZ-Instrument 7798 Serial interface
-  GPIO_MAX31855CS,     // MAX31855 Serial interface
-  GPIO_MAX31855CLK,    // MAX31855 Serial interface
-  GPIO_MAX31855DO,     // MAX31855 Serial interface
-  GPIO_NRG_SEL,        // HLW8012/HLJ-01 Sel output (1 = Voltage)
-  GPIO_NRG_SEL_INV,    // HLW8012/HLJ-01 Sel output (0 = Voltage)
-  GPIO_NRG_CF1,        // HLW8012/HLJ-01 CF1 voltage / current
-  GPIO_HLW_CF,         // HLW8012 CF power
-  GPIO_HJL_CF,         // HJL-01/BL0937 CF power
-  GPIO_MCP39F5_TX,     // MCP39F501 Serial interface (Shelly2)
-  GPIO_MCP39F5_RX,     // MCP39F501 Serial interface (Shelly2)
-  GPIO_MCP39F5_RST,    // MCP39F501 Reset (Shelly2)
-  GPIO_PN532_TXD,      // PN532 NFC Serial Tx
-  GPIO_PN532_RXD,      // PN532 NFC Serial Rx
-  GPIO_SM16716_CLK,    // SM16716 CLOCK
-  GPIO_SM16716_DAT,    // SM16716 DATA
-  GPIO_SM16716_SEL,    // SM16716 SELECT
-  GPIO_DI,             // my92x1 PWM input
-  GPIO_DCKI,           // my92x1 CLK input
-  GPIO_CSE7766_TX,     // CSE7766 Serial interface (S31 and Pow R2) - Not used anymore 20200121
-  GPIO_CSE7766_RX,     // CSE7766 Serial interface (S31 and Pow R2)
-  GPIO_ARIRFRCV,       // AriLux RF Receive input
-  GPIO_TXD,            // Serial interface
-  GPIO_RXD,            // Serial interface
-  GPIO_ROT1A,          // Rotary switch1 A Pin
-  GPIO_ROT1B,          // Rotary switch1 B Pin
-  GPIO_ROT2A,          // Rotary switch2 A Pin
-  GPIO_ROT2B,          // Rotary switch2 B Pin
-  GPIO_HRE_CLOCK,      // Clock/Power line for HR-E Water Meter
-  GPIO_HRE_DATA,       // Data line for HR-E Water Meter
-  GPIO_ADE7953_IRQ,    // ADE7953 IRQ
-  GPIO_ARIRFSEL,       // Arilux RF Receive input selected
-  GPIO_SOLAXX1_TX,     // Solax Inverter tx pin
-  GPIO_SOLAXX1_RX,     // Solax Inverter rx pin
-  GPIO_ZIGBEE_TX,      // Zigbee Serial interface
-  GPIO_ZIGBEE_RX,      // Zigbee Serial interface
-  GPIO_RDM6300_RX,     // RDM6300 RX
-  GPIO_IBEACON_TX,     // HM17 IBEACON TX
-  GPIO_IBEACON_RX,     // HM17 IBEACON RX
-  GPIO_A4988_DIR,      // A4988 direction pin
-  GPIO_A4988_STP,      // A4988 step pin
-  GPIO_A4988_ENA,      // A4988 enabled pin
-  GPIO_A4988_MS1,      // A4988 microstep pin1
-  GPIO_A4988_MS2,      // A4988 microstep pin2
-  GPIO_A4988_MS3,      // A4988 microstep pin3
-  GPIO_DDS2382_TX,     // DDS2382 Serial interface
-  GPIO_DDS2382_RX,     // DDS2382 Serial interface
-  GPIO_DDSU666_TX,     // DDSU666 Serial interface
-  GPIO_DDSU666_RX,     // DDSU666 Serial interface
-  GPIO_SM2135_CLK,     // SM2135 Clk
-  GPIO_SM2135_DAT,     // SM2135 Dat
-  GPIO_DEEPSLEEP,      // Kill switch for deepsleep
-  GPIO_EXS_ENABLE,     // EXS MCU Enable
-  GPIO_TASMOTASLAVE_TXD,     // Slave TX
-  GPIO_TASMOTASLAVE_RXD,     // Slave RX
-  GPIO_TASMOTASLAVE_RST,     // Slave Reset Pin
-  GPIO_TASMOTASLAVE_RST_INV, // Slave Reset Inverted
-  GPIO_HPMA_RX,        // Honeywell HPMA115S0 Serial interface
-  GPIO_HPMA_TX,        // Honeywell HPMA115S0 Serial interface
-  GPIO_GPS_RX,         // GPS serial interface
-  GPIO_GPS_TX,         // GPS serial interface
-  GPIO_HM10_RX,        // HM10-BLE-Mijia-bridge serial interface
-  GPIO_HM10_TX,        // HM10-BLE-Mijia-bridge serial interface
-  GPIO_LE01MR_RX,      // F&F LE-01MR energy meter
-  GPIO_LE01MR_TX,      // F&F LE-01MR energy meter
-  GPIO_CC1101_GDO0,    // CC1101 pin for RX
-  GPIO_CC1101_GDO2,    // CC1101 pin for RX
-  GPIO_HRXL_RX,        // Data from MaxBotix HRXL sonar range sensor
-  GPIO_ELECTRIQ_MOODL_TX, // ElectriQ iQ-wifiMOODL Serial TX
-  GPIO_AS3935,
-  ADC0_INPUT,          // Analog input
-  ADC0_TEMP,           // Thermistor
-  ADC0_LIGHT,          // Light sensor
-  ADC0_BUTTON,         // Button
-  ADC0_BUTTON_INV,
-  ADC0_RANGE,          // Range
-  ADC0_CT_POWER,       // Current
-  // webcam interface
-  GPIO_WEBCAM_PWDN_GPIO_NUM,
-  GPIO_WEBCAM_RESET_GPIO_NUM,
-  GPIO_WEBCAM_XCLK_GPIO_NUM,
-  GPIO_WEBCAM_SIOD_GPIO_NUM,
-  GPIO_WEBCAM_SIOC_GPIO_NUM,
-  GPIO_WEBCAM_Y9_GPIO_NUM,
-  GPIO_WEBCAM_Y8_GPIO_NUM,
-  GPIO_WEBCAM_Y7_GPIO_NUM,
-  GPIO_WEBCAM_Y6_GPIO_NUM,
-  GPIO_WEBCAM_Y5_GPIO_NUM,
-  GPIO_WEBCAM_Y4_GPIO_NUM,
-  GPIO_WEBCAM_Y3_GPIO_NUM,
-  GPIO_WEBCAM_Y2_GPIO_NUM,
-  GPIO_WEBCAM_VSYNC_GPIO_NUM,
-  GPIO_WEBCAM_HREF_GPIO_NUM,
-  GPIO_WEBCAM_PCLK_GPIO_NUM,
-  GPIO_WEBCAM_PSCLK_GPIO_NUM,
-  GPIO_WEBCAM_HSD1_GPIO_NUM,
-  GPIO_WEBCAM_HSD2_GPIO_NUM,
-  GPIO_WEBCAM_HSD3_GPIO_NUM,
-  GPIO_WEBCAM_PSRCS_GPIO_NUM,
+  GPIO_NONE,                           // Not used
+  GPIO_KEY1, GPIO_KEY1_NP, GPIO_KEY1_INV, GPIO_KEY1_INV_NP, // 4 x Button
+  GPIO_SWT1, GPIO_SWT1_NP,             // 8 x User connected external switches
+  GPIO_REL1, GPIO_REL1_INV,            // 8 x Relays
+  GPIO_LED1, GPIO_LED1_INV,            // 4 x Leds
+  GPIO_CNTR1, GPIO_CNTR1_NP,           // 4 x Counter
+  GPIO_PWM1, GPIO_PWM1_INV,            // 5 x PWM
+  GPIO_BUZZER, GPIO_BUZZER_INV,        // Buzzer
+  GPIO_LEDLNK, GPIO_LEDLNK_INV,        // Link led
+  GPIO_I2C_SCL, GPIO_I2C_SDA,          // Software I2C
+  GPIO_SPI_MISO, GPIO_SPI_MOSI, GPIO_SPI_CLK, GPIO_SPI_CS, GPIO_SPI_DC,        // Hardware SPI
+  GPIO_SSPI_MISO, GPIO_SSPI_MOSI, GPIO_SSPI_SCLK, GPIO_SSPI_CS, GPIO_SSPI_DC,  // Software SPI
+  GPIO_BACKLIGHT,                      // Display backlight control
+  GPIO_OLED_RESET,                     // OLED Display Reset
+  GPIO_IRSEND, GPIO_IRRECV,            // IR interface
+  GPIO_RFSEND, GPIO_RFRECV,            // RF interface
+  GPIO_DHT11, GPIO_DHT22, GPIO_SI7021, GPIO_DHT11_OUT,  // DHT11, DHT21, DHT22, AM2301, AM2302, AM2321
+  GPIO_DSB, GPIO_DSB_OUT,              // DS18B20 or DS18S20
+  GPIO_WS2812,                         // WS2812 Led string
+  GPIO_MHZ_TXD, GPIO_MHZ_RXD,          // MH-Z19 Serial interface
+  GPIO_PZEM0XX_TX, GPIO_PZEM004_RX, GPIO_PZEM016_RX, GPIO_PZEM017_RX, // PZEM Serial Modbus interface
+  GPIO_SAIR_TX, GPIO_SAIR_RX,          // SenseAir Serial interface
+  GPIO_PMS5003_TX, GPIO_PMS5003_RX,    // Plantower PMS5003 Serial interface
+  GPIO_SDS0X1_TX, GPIO_SDS0X1_RX,      // Nova Fitness SDS011 Serial interface
+  GPIO_SBR_TX, GPIO_SBR_RX,            // Serial Bridge Serial interface
+  GPIO_SR04_TRIG, GPIO_SR04_ECHO,      // SR04 interface
+  GPIO_SDM120_TX, GPIO_SDM120_RX,      // SDM120 Serial interface
+  GPIO_SDM630_TX, GPIO_SDM630_RX,      // SDM630 Serial interface
+  GPIO_TM16CLK, GPIO_TM16DIO, GPIO_TM16STB,  // TM1638 interface
+  GPIO_MP3_DFR562,                     // RB-DFR-562, DFPlayer Mini MP3 Player
+  GPIO_HX711_SCK, GPIO_HX711_DAT,      // HX711 Load Cell interface
+  GPIO_TX2X_TXD_BLACK,                 // TX20/TX23 Transmission Pin
+  GPIO_TUYA_TX, GPIO_TUYA_RX,          // Tuya Serial interface
+  GPIO_MGC3130_XFER, GPIO_MGC3130_RESET,  // MGC3130 interface
+  GPIO_RF_SENSOR,                      // Rf receiver with sensor decoding
+  GPIO_AZ_TXD, GPIO_AZ_RXD,            // AZ-Instrument 7798 Serial interface
+  GPIO_MAX31855CS, GPIO_MAX31855CLK, GPIO_MAX31855DO,  // MAX31855 Serial interface
+  GPIO_NRG_SEL, GPIO_NRG_SEL_INV, GPIO_NRG_CF1, GPIO_HLW_CF, GPIO_HJL_CF,  // HLW8012/HJL-01/BL0937 energy monitoring
+  GPIO_MCP39F5_TX, GPIO_MCP39F5_RX, GPIO_MCP39F5_RST,  // MCP39F501 Energy monitoring (Shelly2)
+  GPIO_PN532_TXD, GPIO_PN532_RXD,      // PN532 NFC Serial interface
+  GPIO_SM16716_CLK, GPIO_SM16716_DAT, GPIO_SM16716_SEL,  // SM16716 SELECT
+  GPIO_DI, GPIO_DCKI,                  // my92x1 PWM controller
+  GPIO_CSE7766_TX, GPIO_CSE7766_RX,    // CSE7766 Serial interface (S31 and Pow R2)
+  GPIO_ARIRFRCV, GPIO_ARIRFSEL,        // Arilux RF Receive input
+  GPIO_TXD, GPIO_RXD,                  // Serial interface
+  GPIO_ROT1A, GPIO_ROT1B,              // Rotary switch
+  GPIO_ADC_JOY,                        // Analog joystick
+  GPIO_SSPI_MAX31865_CS1,              // MAX31865 Chip Select
+  GPIO_HRE_CLOCK, GPIO_HRE_DATA,       // HR-E Water Meter
+  GPIO_ADE7953_IRQ,                    // ADE7953 IRQ
+  GPIO_SOLAXX1_TX, GPIO_SOLAXX1_RX,    // Solax Inverter Serial interface
+  GPIO_ZIGBEE_TX, GPIO_ZIGBEE_RX,      // Zigbee Serial interface
+  GPIO_RDM6300_RX,                     // RDM6300 RX
+  GPIO_IBEACON_TX, GPIO_IBEACON_RX,    // HM17 IBEACON Serial interface
+  GPIO_A4988_DIR, GPIO_A4988_STP, GPIO_A4988_ENA,  // A4988 interface
+  GPIO_A4988_MS1, GPIO_A4988_MS2, GPIO_A4988_MS3,  // A4988 microstep
+  GPIO_DDS2382_TX, GPIO_DDS2382_RX,    // DDS2382 Serial interface
+  GPIO_DDSU666_TX, GPIO_DDSU666_RX,    // DDSU666 Serial interface
+  GPIO_SM2135_CLK, GPIO_SM2135_DAT,    // SM2135 PWM controller
+  GPIO_DEEPSLEEP,                      // Kill switch for deepsleep
+  GPIO_EXS_ENABLE,                     // EXS MCU Enable
+  GPIO_TASMOTACLIENT_TXD, GPIO_TASMOTACLIENT_RXD,      // Client Serial interface
+  GPIO_TASMOTACLIENT_RST, GPIO_TASMOTACLIENT_RST_INV,  // Client Reset
+  GPIO_HPMA_RX, GPIO_HPMA_TX,          // Honeywell HPMA115S0 Serial interface
+  GPIO_GPS_RX, GPIO_GPS_TX,            // GPS Serial interface
+  GPIO_HM10_RX, GPIO_HM10_TX,          // HM10-BLE-Mijia-bridge Serial interface
+  GPIO_LE01MR_RX, GPIO_LE01MR_TX,      // F&F LE-01MR energy meter
+  GPIO_CC1101_GDO0, GPIO_CC1101_GDO2,  // CC1101 Serial interface
+  GPIO_HRXL_RX,                        // Data from MaxBotix HRXL sonar range sensor
+  GPIO_ELECTRIQ_MOODL_TX,              // ElectriQ iQ-wifiMOODL Serial TX
+  GPIO_AS3935,                         // Franklin Lightning Sensor
+  GPIO_ADC_INPUT,                      // Analog input
+  GPIO_ADC_TEMP,                       // Analog Thermistor
+  GPIO_ADC_LIGHT,                      // Analog Light sensor
+  GPIO_ADC_BUTTON, GPIO_ADC_BUTTON_INV,  // Analog Button
+  GPIO_ADC_RANGE,                      // Analog Range
+  GPIO_ADC_CT_POWER,                   // ANalog Current
+  GPIO_WEBCAM_PWDN, GPIO_WEBCAM_RESET, GPIO_WEBCAM_XCLK,  // Webcam
+  GPIO_WEBCAM_SIOD, GPIO_WEBCAM_SIOC,  // Webcam I2C
+  GPIO_WEBCAM_DATA,
+  GPIO_WEBCAM_VSYNC, GPIO_WEBCAM_HREF, GPIO_WEBCAM_PCLK,
+  GPIO_WEBCAM_PSCLK,
+  GPIO_WEBCAM_HSD,
+  GPIO_WEBCAM_PSRCS,
+  GPIO_BOILER_OT_RX, GPIO_BOILER_OT_TX,  // OpenTherm Boiler TX pin
+  GPIO_WINDMETER_SPEED,                // WindMeter speed counter pin
+  GPIO_KEY1_TC,                        // Touch pin as button
+  GPIO_BL0940_RX,                      // BL0940 serial interface
+  GPIO_TCP_TX, GPIO_TCP_RX,            // TCP to serial bridge
+  GPIO_ETH_PHY_POWER, GPIO_ETH_PHY_MDC, GPIO_ETH_PHY_MDIO,  // Ethernet
+  GPIO_TELEINFO_RX,                    // Teleinfo telemetry data receive pin
+  GPIO_TELEINFO_ENABLE,                // Teleinfo Enable Receive Pin
+  GPIO_LMT01,                          // LMT01 input counting pin
+  GPIO_IEM3000_TX, GPIO_IEM3000_RX,    // IEM3000 Serial interface
+  GPIO_ZIGBEE_RST,                     // Zigbee reset
+  GPIO_DYP_RX,
   GPIO_SENSOR_END };
 
 enum ProgramSelectablePins {
@@ -230,31 +148,22 @@ enum ProgramSelectablePins {
 // Text in webpage Module Parameters and commands GPIOS and GPIO
 const char kSensorNames[] PROGMEM =
   D_SENSOR_NONE "|"
-  D_SENSOR_BUTTON "|"
-  D_SENSOR_BUTTON "n|"
-  D_SENSOR_BUTTON "i|"
-  D_SENSOR_BUTTON "in|"
-  D_SENSOR_SWITCH "|"
-  D_SENSOR_SWITCH "n|"
-  D_SENSOR_RELAY "|"
-  D_SENSOR_RELAY "i|"
-  D_SENSOR_LED "|"
-  D_SENSOR_LED "i|"
-  D_SENSOR_COUNTER "|"
-  D_SENSOR_COUNTER "n|"
-  D_SENSOR_PWM "|"
-  D_SENSOR_PWM "i|"
-  D_SENSOR_BUZZER "|"
-  D_SENSOR_BUZZER "i|"
-  D_SENSOR_LED_LINK "|" D_SENSOR_LED_LINK "i|"
+  D_SENSOR_BUTTON "|" D_SENSOR_BUTTON "_n|" D_SENSOR_BUTTON "_i|" D_SENSOR_BUTTON "_in|"
+  D_SENSOR_SWITCH "|" D_SENSOR_SWITCH "_n|"
+  D_SENSOR_RELAY "|" D_SENSOR_RELAY "_i|"
+  D_SENSOR_LED "|" D_SENSOR_LED "_i|"
+  D_SENSOR_COUNTER "|" D_SENSOR_COUNTER "_n|"
+  D_SENSOR_PWM "|" D_SENSOR_PWM "_i|"
+  D_SENSOR_BUZZER "|" D_SENSOR_BUZZER "_i|"
+  D_SENSOR_LED_LINK "|" D_SENSOR_LED_LINK "_i|"
   D_SENSOR_I2C_SCL "|" D_SENSOR_I2C_SDA "|"
   D_SENSOR_SPI_MISO "|" D_SENSOR_SPI_MOSI "|" D_SENSOR_SPI_CLK "|" D_SENSOR_SPI_CS "|" D_SENSOR_SPI_DC "|"
   D_SENSOR_SSPI_MISO "|" D_SENSOR_SSPI_MOSI "|" D_SENSOR_SSPI_SCLK "|" D_SENSOR_SSPI_CS "|" D_SENSOR_SSPI_DC "|"
   D_SENSOR_BACKLIGHT "|" D_SENSOR_OLED_RESET "|"
   D_SENSOR_IRSEND "|" D_SENSOR_IRRECV "|"
   D_SENSOR_RFSEND "|" D_SENSOR_RFRECV "|"
-  D_SENSOR_DHT11 "|" D_SENSOR_AM2301 "|" D_SENSOR_SI7021 "|" D_SENSOR_DHT11 "o|"
-  D_SENSOR_DS18X20 "|" D_SENSOR_DS18X20 "o|"
+  D_SENSOR_DHT11 "|" D_SENSOR_AM2301 "|" D_SENSOR_SI7021 "|" D_SENSOR_DHT11 "_o|"
+  D_SENSOR_DS18X20 "|" D_SENSOR_DS18X20 "_o|"
   D_SENSOR_WS2812 "|"
   D_SENSOR_MHZ_TX "|" D_SENSOR_MHZ_RX "|"
   D_SENSOR_PZEM0XX_TX "|" D_SENSOR_PZEM004_RX "|" D_SENSOR_PZEM016_RX "|" D_SENSOR_PZEM017_RX "|"
@@ -274,18 +183,19 @@ const char kSensorNames[] PROGMEM =
   D_SENSOR_RF_SENSOR "|"
   D_SENSOR_AZ_TX "|" D_SENSOR_AZ_RX "|"
   D_SENSOR_MAX31855_CS "|" D_SENSOR_MAX31855_CLK "|" D_SENSOR_MAX31855_DO "|"
-  D_SENSOR_NRG_SEL "|" D_SENSOR_NRG_SEL "i|" D_SENSOR_NRG_CF1 "|" D_SENSOR_HLW_CF "|" D_SENSOR_HJL_CF "|"
+  D_SENSOR_NRG_SEL "|" D_SENSOR_NRG_SEL "_i|" D_SENSOR_NRG_CF1 "|" D_SENSOR_HLW_CF "|" D_SENSOR_HJL_CF "|"
   D_SENSOR_MCP39F5_TX "|" D_SENSOR_MCP39F5_RX "|" D_SENSOR_MCP39F5_RST "|"
   D_SENSOR_PN532_TX "|" D_SENSOR_PN532_RX "|"
   D_SENSOR_SM16716_CLK "|" D_SENSOR_SM16716_DAT "|" D_SENSOR_SM16716_POWER "|"
   D_SENSOR_MY92X1_DI "|" D_SENSOR_MY92X1_DCKI "|"
   D_SENSOR_CSE7766_TX "|" D_SENSOR_CSE7766_RX "|"
-  D_SENSOR_ARIRFRCV "|"
+  D_SENSOR_ARIRFRCV "|" D_SENSOR_ARIRFSEL "|"
   D_SENSOR_TXD "|" D_SENSOR_RXD "|"
-  D_SENSOR_ROTARY "1a|" D_SENSOR_ROTARY "1b|" D_SENSOR_ROTARY "2a|" D_SENSOR_ROTARY "2b|"
+  D_SENSOR_ROTARY "_a|" D_SENSOR_ROTARY "_b|"
+  D_SENSOR_ADC_JOYSTICK "|"
+  D_SENSOR_MAX31865_CS "|"
   D_SENSOR_HRE_CLOCK "|" D_SENSOR_HRE_DATA "|"
   D_SENSOR_ADE7953_IRQ "|"
-  D_SENSOR_ARIRFSEL "|"
   D_SENSOR_SOLAXX1_TX "|" D_SENSOR_SOLAXX1_RX "|"
   D_SENSOR_ZIGBEE_TXD "|" D_SENSOR_ZIGBEE_RXD "|"
   D_SENSOR_RDM6300_RX "|"
@@ -295,7 +205,7 @@ const char kSensorNames[] PROGMEM =
   D_SENSOR_DDSU666_TX "|" D_SENSOR_DDSU666_RX "|"
   D_SENSOR_SM2135_CLK "|" D_SENSOR_SM2135_DAT "|"
   D_SENSOR_DEEPSLEEP "|" D_SENSOR_EXS_ENABLE "|"
-  D_SENSOR_SLAVE_TX "|" D_SENSOR_SLAVE_RX "|" D_SENSOR_SLAVE_RESET "|" D_SENSOR_SLAVE_RESET "i|"
+  D_SENSOR_CLIENT_TX "|" D_SENSOR_CLIENT_RX "|" D_SENSOR_CLIENT_RESET "|" D_SENSOR_CLIENT_RESET "_i|"
   D_SENSOR_HPMA_RX "|" D_SENSOR_HPMA_TX "|"
   D_SENSOR_GPS_RX "|" D_SENSOR_GPS_TX "|"
   D_SENSOR_HM10_RX "|" D_SENSOR_HM10_TX "|"
@@ -304,45 +214,51 @@ const char kSensorNames[] PROGMEM =
   D_SENSOR_HRXL_RX "|"
   D_SENSOR_ELECTRIQ_MOODL "|"
   D_SENSOR_AS3935 "|"
-  D_ANALOG_INPUT "|"
-  D_TEMPERATURE "|" D_LIGHT "|"
-  D_SENSOR_BUTTON "|" D_SENSOR_BUTTON "i|"
-  D_RANGE "|"
-  D_CT_POWER "|"
-  D_GPIO_WEBCAM_PWDN_GPIO_NUM "|"
-  D_GPIO_WEBCAM_RESET_GPIO_NUM "|"
-  D_GPIO_WEBCAM_XCLK_GPIO_NUM "|"
-  D_GPIO_WEBCAM_SIOD_GPIO_NUM "|"
-  D_GPIO_WEBCAM_SIOC_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y9_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y8_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y7_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y6_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y5_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y4_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y3_GPIO_NUM "|"
-  D_GPIO_WEBCAM_Y2_GPIO_NUM "|"
-  D_GPIO_WEBCAM_VSYNC_GPIO_NUM "|"
-  D_GPIO_WEBCAM_HREF_GPIO_NUM "|"
-  D_GPIO_WEBCAM_PCLK_GPIO_NUM "|"
-  D_GPIO_WEBCAM_PSCLK_GPIO_NUM "|"
-  D_GPIO_WEBCAM_HSD1_GPIO_NUM "|"
-  D_GPIO_WEBCAM_HSD2_GPIO_NUM "|"
-  D_GPIO_WEBCAM_HSD3_GPIO_NUM "|"
-  D_GPIO_WEBCAM_PSRCS_GPIO_NUM
+  D_SENSOR_ADC_INPUT "|"
+  D_SENSOR_ADC_TEMP "|"
+  D_SENSOR_ADC_LIGHT "|"
+  D_SENSOR_ADC_BUTTON "|" D_SENSOR_ADC_BUTTON "_i|"
+  D_SENSOR_ADC_RANGE "|"
+  D_SENSOR_ADC_CT_POWER "|"
+  D_GPIO_WEBCAM_PWDN "|" D_GPIO_WEBCAM_RESET "|" D_GPIO_WEBCAM_XCLK "|"
+  D_GPIO_WEBCAM_SIOD "|" D_GPIO_WEBCAM_SIOC "|"
+  D_GPIO_WEBCAM_DATA "|"
+  D_GPIO_WEBCAM_VSYNC "|" D_GPIO_WEBCAM_HREF "|" D_GPIO_WEBCAM_PCLK "|"
+  D_GPIO_WEBCAM_PSCLK "|"
+  D_GPIO_WEBCAM_HSD "|"
+  D_GPIO_WEBCAM_PSRCS "|"
+  D_SENSOR_BOILER_OT_RX "|" D_SENSOR_BOILER_OT_TX "|"
+  D_SENSOR_WINDMETER_SPEED "|" D_SENSOR_BUTTON "_tc|"
+  D_SENSOR_BL0940_RX "|"
+  D_SENSOR_TCP_TXD "|" D_SENSOR_TCP_RXD "|"
+  D_SENSOR_ETH_PHY_POWER "|" D_SENSOR_ETH_PHY_MDC "|" D_SENSOR_ETH_PHY_MDIO "|"
+  D_SENSOR_TELEINFO_RX "|" D_SENSOR_TELEINFO_ENABLE "|"
+  D_SENSOR_LMT01_PULSE "|"
+  D_SENSOR_IEM3000_TX "|" D_SENSOR_IEM3000_RX "|"
+  D_SENSOR_ZIGBEE_RST "|"
+  D_SENSOR_DYP_RX
   ;
 
 const char kSensorNamesFixed[] PROGMEM =
   D_SENSOR_USER;
 
+#define MAX_MAX31865_CS  6
+#define MAX_WEBCAM_DATA  8
+#define MAX_WEBCAM_HSD   3
+
 const uint16_t kGpioNiceList[] PROGMEM = {
-  GPIO_NONE,                             // Not used
+  GPIO_NONE,                            // Not used
   AGPIO(GPIO_KEY1) + MAX_KEYS,          // Buttons
   AGPIO(GPIO_KEY1_NP) + MAX_KEYS,
   AGPIO(GPIO_KEY1_INV) + MAX_KEYS,
   AGPIO(GPIO_KEY1_INV_NP) + MAX_KEYS,
+  AGPIO(GPIO_KEY1_TC) + MAX_KEYS,       // Touch button
   AGPIO(GPIO_SWT1) + MAX_SWITCHES,      // User connected external switches
   AGPIO(GPIO_SWT1_NP) + MAX_SWITCHES,
+#ifdef ROTARY_V1
+  AGPIO(GPIO_ROT1A) + MAX_ROTARIES,     // Rotary A Pin
+  AGPIO(GPIO_ROT1B) + MAX_ROTARIES,     // Rotary B Pin
+#endif
   AGPIO(GPIO_REL1) + MAX_RELAYS,        // Relays
   AGPIO(GPIO_REL1_INV) + MAX_RELAYS,
   AGPIO(GPIO_LED1) + MAX_LEDS,          // Leds
@@ -354,14 +270,14 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_PWM1) + MAX_PWMS,          // RGB   Red   or C  Cold White
   AGPIO(GPIO_PWM1_INV) + MAX_PWMS,
 #ifdef USE_BUZZER
-  AGPIO(GPIO_BUZZER),         // Buzzer
-  AGPIO(GPIO_BUZZER_INV),     // Inverted buzzer
+  AGPIO(GPIO_BUZZER),                   // Buzzer
+  AGPIO(GPIO_BUZZER_INV),               // Inverted buzzer
 #endif
-  AGPIO(GPIO_LEDLNK),         // Link led
-  AGPIO(GPIO_LEDLNK_INV),     // Inverted link led
+  AGPIO(GPIO_LEDLNK),                   // Link led
+  AGPIO(GPIO_LEDLNK_INV),               // Inverted link led
 #ifdef USE_I2C
-  AGPIO(GPIO_I2C_SCL),        // I2C SCL
-  AGPIO(GPIO_I2C_SDA),        // I2C SDA
+  AGPIO(GPIO_I2C_SCL),                  // I2C SCL
+  AGPIO(GPIO_I2C_SDA),                  // I2C SDA
 #endif
 #ifdef USE_SPI
   AGPIO(GPIO_SPI_MISO),       // SPI MISO
@@ -369,12 +285,12 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_SPI_CLK),        // SPI Clk
   AGPIO(GPIO_SPI_CS),         // SPI Chip Select
   AGPIO(GPIO_SPI_DC),         // SPI Data Direction
-  AGPIO(GPIO_SSPI_MISO),      // Software SPI Master Input Slave Output
-  AGPIO(GPIO_SSPI_MOSI),      // Software SPI Master Output Slave Input
+#endif
+  AGPIO(GPIO_SSPI_MISO),      // Software SPI Master Input Client Output
+  AGPIO(GPIO_SSPI_MOSI),      // Software SPI Master Output Client Input
   AGPIO(GPIO_SSPI_SCLK),      // Software SPI Serial Clock
   AGPIO(GPIO_SSPI_CS),        // Software SPI Chip Select
   AGPIO(GPIO_SSPI_DC),        // Software SPI Data or Command
-#endif
 #ifdef USE_DISPLAY
   AGPIO(GPIO_BACKLIGHT),      // Display backlight control
   AGPIO(GPIO_OLED_RESET),     // OLED Display Reset
@@ -392,6 +308,9 @@ const uint16_t kGpioNiceList[] PROGMEM = {
 #ifdef USE_DS18x20
   AGPIO(GPIO_DSB),            // Single wire DS18B20 or DS18S20
   AGPIO(GPIO_DSB_OUT),        // Pseudo Single wire DS18B20 or DS18S20
+#endif
+#ifdef USE_LMT01
+  AGPIO(GPIO_LMT01),          // LMT01, count pulses on GPIO
 #endif
 
 // Light
@@ -510,9 +429,16 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_SOLAXX1_RX),     // Solax Inverter rx pin
 #endif // USE_SOLAX_X1
 #ifdef USE_LE01MR
-  AGPIO(GPIO_LE01MR_RX),     // F7F LE-01MR energy meter rx pin
   AGPIO(GPIO_LE01MR_TX),     // F7F LE-01MR energy meter tx pin
+  AGPIO(GPIO_LE01MR_RX),     // F7F LE-01MR energy meter rx pin
 #endif // IFDEF:USE_LE01MR
+#ifdef USE_BL0940
+  AGPIO(GPIO_BL0940_RX),     // BL0940 Serial interface
+#endif
+#ifdef USE_IEM3000
+  AGPIO(GPIO_IEM3000_TX),    // IEM3000 Serial interface
+  AGPIO(GPIO_IEM3000_RX),    // IEM3000 Serial interface
+#endif
 #endif  // USE_ENERGY_SENSOR
 
 // Serial
@@ -520,9 +446,14 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_SBR_TX),         // Serial Bridge Serial interface
   AGPIO(GPIO_SBR_RX),         // Serial Bridge Serial interface
 #endif
+#ifdef USE_TCP_BRIDGE
+  AGPIO(GPIO_TCP_TX),         // TCP Serial bridge
+  AGPIO(GPIO_TCP_RX),         // TCP Serial bridge
+#endif
 #ifdef USE_ZIGBEE
   AGPIO(GPIO_ZIGBEE_TX),      // Zigbee Serial interface
   AGPIO(GPIO_ZIGBEE_RX),      // Zigbee Serial interface
+  AGPIO(GPIO_ZIGBEE_RST),     // Zigbee reset
 #endif
 #ifdef USE_MHZ19
   AGPIO(GPIO_MHZ_TXD),        // MH-Z19 Serial interface
@@ -547,6 +478,9 @@ const uint16_t kGpioNiceList[] PROGMEM = {
 #if defined(USE_TX20_WIND_SENSOR) || defined(USE_TX23_WIND_SENSOR)
   AGPIO(GPIO_TX2X_TXD_BLACK), // TX20/TX23 Transmission Pin
 #endif
+#ifdef USE_WINDMETER
+  AGPIO(GPIO_WINDMETER_SPEED),
+#endif
 #ifdef USE_MP3_PLAYER
   AGPIO(GPIO_MP3_DFR562),     // RB-DFR-562, DFPlayer Mini MP3 Player Serial interface
 #endif
@@ -558,26 +492,30 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_PN532_TXD),      // PN532 HSU Tx
   AGPIO(GPIO_PN532_RXD),      // PN532 HSU Rx
 #endif
-#ifdef USE_TASMOTA_SLAVE
-  AGPIO(GPIO_TASMOTASLAVE_TXD),     // Tasmota Slave TX
-  AGPIO(GPIO_TASMOTASLAVE_RXD),     // Tasmota Slave RX
-  AGPIO(GPIO_TASMOTASLAVE_RST),     // Tasmota Slave Reset
-  AGPIO(GPIO_TASMOTASLAVE_RST_INV), // Tasmota Slave Reset Inverted
+#ifdef USE_TASMOTA_CLIENT
+  AGPIO(GPIO_TASMOTACLIENT_TXD),     // Tasmota Client TX
+  AGPIO(GPIO_TASMOTACLIENT_RXD),     // Tasmota Client RX
+  AGPIO(GPIO_TASMOTACLIENT_RST),     // Tasmota Client Reset
+  AGPIO(GPIO_TASMOTACLIENT_RST_INV), // Tasmota Client Reset Inverted
 #endif
 #ifdef USE_RDM6300
   AGPIO(GPIO_RDM6300_RX),
 #endif
 #ifdef USE_IBEACON
-  AGPIO(GPIO_IBEACON_RX),
   AGPIO(GPIO_IBEACON_TX),
+  AGPIO(GPIO_IBEACON_RX),
 #endif
 #ifdef USE_GPS
-  AGPIO(GPIO_GPS_RX),         // GPS serial interface
   AGPIO(GPIO_GPS_TX),         // GPS serial interface
+  AGPIO(GPIO_GPS_RX),         // GPS serial interface
 #endif
 #ifdef USE_HM10
-  AGPIO(GPIO_HM10_RX),         // GPS serial interface
   AGPIO(GPIO_HM10_TX),         // GPS serial interface
+  AGPIO(GPIO_HM10_RX),         // GPS serial interface
+#endif
+#ifdef USE_OPENTHERM
+  AGPIO(GPIO_BOILER_OT_TX),
+  AGPIO(GPIO_BOILER_OT_RX),
 #endif
 
 #ifdef USE_MGC3130
@@ -589,11 +527,8 @@ const uint16_t kGpioNiceList[] PROGMEM = {
   AGPIO(GPIO_MAX31855CLK),    // MAX31855 Serial interface
   AGPIO(GPIO_MAX31855DO),     // MAX31855 Serial interface
 #endif
-#ifdef ROTARY_V1
-  AGPIO(GPIO_ROT1A),          // Rotary switch1 A Pin
-  AGPIO(GPIO_ROT1B),          // Rotary switch1 B Pin
-  AGPIO(GPIO_ROT2A),          // Rotary switch2 A Pin
-  AGPIO(GPIO_ROT2B),          // Rotary switch2 B Pin
+#ifdef USE_MAX31855
+  AGPIO(GPIO_SSPI_MAX31865_CS1) + MAX_MAX31865_CS,
 #endif
 #ifdef USE_HRE
   AGPIO(GPIO_HRE_CLOCK),
@@ -618,46 +553,63 @@ const uint16_t kGpioNiceList[] PROGMEM = {
 #ifdef USE_HRXL
   AGPIO(GPIO_HRXL_RX),
 #endif
+#ifdef USE_DYP
+  AGPIO(GPIO_DYP_RX),
+#endif
 #ifdef USE_AS3935
-  AGPIO(GPIO_AS3935),
+  AGPIO(GPIO_AS3935),          // AS3935 IRQ Pin
 #endif
-/*
-#ifndef USE_ADC_VCC
-  AGPIO(ADC0_INPUT),          // Analog input
-  AGPIO(ADC0_TEMP),           // Thermistor
-  AGPIO(ADC0_LIGHT),          // Light sensor
-  AGPIO(ADC0_BUTTON),         // Button
-  AGPIO(ADC0_BUTTON_INV),
-  AGPIO(ADC0_RANGE),          // Range
-  AGPIO(ADC0_CT_POWER),       // Current
+#ifdef USE_TELEINFO
+  AGPIO(GPIO_TELEINFO_RX),
+  AGPIO(GPIO_TELEINFO_ENABLE),
 #endif
-*/
-#if defined(ESP32) && defined(USE_WEBCAM)
-AGPIO(GPIO_WEBCAM_PWDN_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_RESET_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_XCLK_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_SIOD_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_SIOC_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y9_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y8_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y7_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y6_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y5_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y4_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y3_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_Y2_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_VSYNC_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_HREF_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_PCLK_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_PSCLK_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_HSD1_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_HSD2_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_HSD3_GPIO_NUM),
-AGPIO(GPIO_WEBCAM_PSRCS_GPIO_NUM),
+#ifdef USE_ADC
+  AGPIO(GPIO_ADC_INPUT) + MAX_ADCS,       // Analog inputs
+  AGPIO(GPIO_ADC_TEMP) + MAX_ADCS,        // Thermistor
+  AGPIO(GPIO_ADC_LIGHT) + MAX_ADCS,       // Light sensor
+  AGPIO(GPIO_ADC_BUTTON) + MAX_ADCS,      // Button
+  AGPIO(GPIO_ADC_BUTTON_INV) + MAX_ADCS,
+  AGPIO(GPIO_ADC_RANGE) + MAX_ADCS,       // Range
+  AGPIO(GPIO_ADC_CT_POWER) + MAX_ADCS,    // Current
+  AGPIO(GPIO_ADC_JOY) + MAX_ADCS,         // Joystick
+#endif
+#ifdef USE_WEBCAM
+  AGPIO(GPIO_WEBCAM_PWDN),
+  AGPIO(GPIO_WEBCAM_RESET),
+  AGPIO(GPIO_WEBCAM_XCLK),
+  AGPIO(GPIO_WEBCAM_SIOD),
+  AGPIO(GPIO_WEBCAM_SIOC),
+  AGPIO(GPIO_WEBCAM_DATA) + MAX_WEBCAM_DATA,
+  AGPIO(GPIO_WEBCAM_VSYNC),
+  AGPIO(GPIO_WEBCAM_HREF),
+  AGPIO(GPIO_WEBCAM_PCLK),
+  AGPIO(GPIO_WEBCAM_PSCLK),
+  AGPIO(GPIO_WEBCAM_HSD) + MAX_WEBCAM_HSD,
+  AGPIO(GPIO_WEBCAM_PSRCS),
+#endif
+#ifdef USE_ETHERNET
+  AGPIO(GPIO_ETH_PHY_POWER),
+  AGPIO(GPIO_ETH_PHY_MDC),
+  AGPIO(GPIO_ETH_PHY_MDIO),  // Ethernet
 #endif
 };
 
 //********************************************************************************************
+
+// User selectable ADC functionality
+enum UserSelectableAdc {
+  ADC_NONE,           // Not used
+  ADC_INPUT,          // Analog input
+  ADC_TEMP,           // Thermistor
+  ADC_LIGHT,          // Light sensor
+  ADC_BUTTON,         // Button
+  ADC_BUTTON_INV,
+  ADC_RANGE,          // Range
+  ADC_CT_POWER,       // Current
+  ADC_JOY,            // Joystick
+//  ADC_SWITCH,         // Switch
+//  ADC_SWITCH_INV,
+  ADC_END };
 
 #define MAX_GPIO_PIN       40   // Number of supported GPIO
 #define MIN_FLASH_PINS     4    // Number of flash chip pins unusable for configuration (GPIO6, 7, 8 and 11)
@@ -665,7 +617,7 @@ AGPIO(GPIO_WEBCAM_PSRCS_GPIO_NUM),
 #define WEMOS_MODULE       0    // Wemos module
 
 //                                  0 1 2 3 4 5 6 7 8 9101112131415161718192021222324252627282930313233343536373839
-const char PINS_WEMOS[] PROGMEM = "IOTXIORXIOIOflashcFLFLolIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOA6A7A0IoIoA3";
+const char PINS_WEMOS[] PROGMEM = "IOTXIORXIOIOflashcFLFLolIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOIOAOAOIAIAIAIAIAIA";
 
 //********************************************************************************************
 
@@ -708,20 +660,14 @@ typedef struct MYTMPLT {
 
 /********************************************************************************************/
 // Supported hardware modules
-enum SupportedModules {
-  WEMOS, ESP32_CAM_AITHINKER,
-  MAXMODULE};
+enum SupportedModules { WEMOS, ESP32_CAM_AITHINKER, MAXMODULE };
 
 #define USER_MODULE        255
 
-const char kModuleNames[] PROGMEM =
-  "ESP32-DevKit|ESP32 Cam AiThinker";
+const char kModuleNames[] PROGMEM = "ESP32-DevKit|ESP32 Cam AiThinker";
 
 // Default module settings
-const uint8_t kModuleNiceList[MAXMODULE] PROGMEM = {
-  WEMOS,
-  ESP32_CAM_AITHINKER
-};
+const uint8_t kModuleNiceList[MAXMODULE] PROGMEM = { WEMOS, ESP32_CAM_AITHINKER };
 
 const mytmplt kModules PROGMEM =
 {                              // WEMOS - Espressif ESP32-DevKitC - Any ESP32 device like WeMos and NodeMCU hardware (ESP32)
@@ -767,6 +713,16 @@ const mytmplt kModules PROGMEM =
   AGPIO(GPIO_USER),            // 39      I   NO PULLUP       GPIO39, SENSOR_VN, ADC1_CH3, ADC_H, RTC_GPIO3
   0                            // Flag
 };
+
+/*********************************************************************************************\
+ Known templates
+
+{"NAME":"AITHINKER CAM","GPIO":[4992,1,1,1,1,5088,1,1,1,1,1,1,1,1,5089,5090,0,5091,5184,5152,0,5120,5024,5056,0,0,0,0,4928,1,5094,5095,5092,0,0,5093],"FLAG":0,"BASE":1}
+{"NAME":"Olimex ESP32-PoE","GPIO":[1,1,1,1,1,1,0,0,5536,1,1,1,1,0,5600,0,0,0,0,5568,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],"FLAG":0,"BASE":1}
+{"NAME":"wESP32","GPIO":[1,1,1,1,1,1,0,0,0,1,1,1,5568,5600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],"FLAG":0,"BASE":1}
+{"NAME":"Denky (Teleinfo)","GPIO":[1,1,1,1,5664,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1376,1,1,0,0,0,0,1,5632,1,1,1,0,0,1],"FLAG":0,"BASE":1}
+
+\*********************************************************************************************/
 
 #endif  // ESP32
 
