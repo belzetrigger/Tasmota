@@ -22,9 +22,7 @@
 // default baudrate of D0 output
 #define SML_BAUDRATE 9600
 
-// send this every N seconds (for meters that only send data on demand)
-// not longer supported, use scripting instead
-//#define SML_SEND_SEQ
+
 
 // debug counter input to led for counter1 and 2
 //#define DEBUG_CNT_LED1 2
@@ -1937,9 +1935,9 @@ void SML_Show(boolean json) {
 
     if (power != 0)
     {
-      DomoticzSensorPowerEnergy(power, usage1);
+     // DomoticzSensorPowerEnergy(power, usage1);
       // BLZ: for domoticz 2020.2 we need to send all values!
-      DomoticzSensorP1SmartMeter(usage1, "0", "0", "0", power);
+     // DomoticzSensorP1SmartMeter(usage1, "0", "0", "0", power);
 
       // use for water? D_DOMOTICZ_COUNT
     }
@@ -1949,9 +1947,9 @@ void SML_Show(boolean json) {
     }
 // -------------- GAS
 #if METER == EHZ_I_GAS || METER == EHZ_I_GAS_H2O
-    double dGas = meter_vars[3];
+    double dGas = meter_vars[3]*1000;
     char gasCounter[16];
-    dtostrfd(meter_vars[3], 1, gasCounter);
+    dtostrfd(dGas, 1, gasCounter);
     AddLog_P(LOG_LEVEL_INFO, PSTR("MQT: BLZ: Gas "), gasCounter );
     //DomoticzSensor(DZ_COUNT, gasCounter); // miss usePM1
     char data[64];
@@ -1981,6 +1979,17 @@ void SML_Show(boolean json) {
     */
   }
 #endif // USE_DOMOTICZ
+
+#ifdef USE_ENERGY_SENSOR
+  
+  double total = meter_vars[0];
+  // Make sure option72 is ON
+  // console: SetOption72 1
+  EnergyUpdateTotal(total, true); 
+  double currentPower = meter_vars[1];
+  Energy.active_power[0] = currentPower; 
+  //AddLog_P2(LOG_LEVEL_DEBUG, PSTR("BLZ: Power %d, total %d"), (int)currentPower, (int) total);
+#endif
 }
 
 struct SML_COUNTER {
@@ -2480,8 +2489,8 @@ void SetDBGLed(uint8_t srcpin, uint8_t ledpin) {
 
 // fast counter polling
 void SML_Counter_Poll(void) {
-uint16_t meters,cindex=0;
-uint32_t ctime=millis();
+  uint16_t meters,cindex=0;
+  uint32_t ctime=millis();
 
   for (meters=0; meters<meters_used; meters++) {
     if (meter_desc_p[meters].type=='c') {
@@ -2551,7 +2560,7 @@ uint32_t ctime=millis();
       cindex++;
     }
   }
-}
+}//void SML_Counter_Poll(void) {
 
 #ifdef USE_SCRIPT
 char *SML_Get_Sequence(char *cp,uint32_t index) {

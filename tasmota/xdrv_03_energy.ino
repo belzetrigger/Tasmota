@@ -97,12 +97,12 @@ struct ENERGY {
   uint8_t data_valid[3] = { 0, 0, 0 };
 
   uint8_t phase_count = 1;                      // Number of phases active
-  bool voltage_common = false;                  // Use single voltage
-  bool frequency_common = false;                // Use single frequency
+  bool voltage_common = true;                  // Use single voltage
+  bool frequency_common = true;                // Use single frequency
   bool kWhtoday_offset_init = false;
 
-  bool voltage_available = true;                // Enable if voltage is measured
-  bool current_available = true;                // Enable if current is measured
+  bool voltage_available = false;                // Enable if voltage is measured
+  bool current_available = false;                // Enable if current is measured
 
   bool type_dc = false;
   bool power_on = true;
