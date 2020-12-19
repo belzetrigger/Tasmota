@@ -776,7 +776,7 @@ void DisplayText(void)
                 buttons[num]->vpower.disable=dis;
                 if (!dis) {
                   if (buttons[num]->vpower.is_virtual) buttons[num]->xdrawButton(buttons[num]->vpower.on_off);
-                  else buttons[num]->xdrawButton(bitRead(power,num));
+                  else buttons[num]->xdrawButton(bitRead(TasmotaGlobal.power,num));
                 }
               }
               break;
@@ -828,7 +828,7 @@ void DisplayText(void)
                   renderer->GetColorFromIndex(fill),renderer->GetColorFromIndex(textcolor),bbuff,textsize);
                 if (!bflags) {
                   // power button
-                  if (dflg) buttons[num]->xdrawButton(bitRead(power,num));
+                  if (dflg) buttons[num]->xdrawButton(bitRead(TasmotaGlobal.power,num));
                   buttons[num]->vpower.is_virtual=0;
                 } else {
                   // virtual button
@@ -1034,7 +1034,7 @@ void DisplayLogBufferInit(void)
     DisplayReAllocLogBuffer();
 
     char buffer[40];
-    snprintf_P(buffer, sizeof(buffer), PSTR(D_VERSION " %s%s"), my_version, my_image);
+    snprintf_P(buffer, sizeof(buffer), PSTR(D_VERSION " %s%s"), TasmotaGlobal.version, TasmotaGlobal.image_name);
     DisplayLogBufferAdd(buffer);
     snprintf_P(buffer, sizeof(buffer), PSTR("Display mode %d"), Settings.display_mode);
     DisplayLogBufferAdd(buffer);
@@ -1045,7 +1045,7 @@ void DisplayLogBufferInit(void)
     DisplayLogBufferAdd(buffer);
     snprintf_P(buffer, sizeof(buffer), PSTR("IP %s"), NetworkAddress().toString().c_str());
     DisplayLogBufferAdd(buffer);
-    if (!global_state.wifi_down) {
+    if (!TasmotaGlobal.global_state.wifi_down) {
       snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_SSID " %s"), SettingsText(SET_STASSID1 + Settings.sta_active));
       DisplayLogBufferAdd(buffer);
       snprintf_P(buffer, sizeof(buffer), PSTR(D_JSON_RSSI " %d%%"), WifiGetRssiAsQuality(WiFi.RSSI()));
@@ -1148,7 +1148,7 @@ void DisplayJsonValue(const char* topic, const char* device, const char* mkey, c
   }
   snprintf_P(buffer, sizeof(buffer), PSTR("%s %s"), source, svalue);
 
-//  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_DEBUG "mkey [%s], source [%s], value [%s], quantity_code %d, log_buffer [%s]"), mkey, source, value, quantity_code, buffer);
+//  AddLog_P(LOG_LEVEL_DEBUG, PSTR(D_LOG_DEBUG "mkey [%s], source [%s], value [%s], quantity_code %d, log_buffer [%s]"), mkey, source, value, quantity_code, buffer);
 
   DisplayLogBufferAdd(buffer);
 }
@@ -1165,50 +1165,44 @@ void DisplayAnalyzeJson(char *topic, char *json)
 // tele/wemos5/SENSOR {"Time":"2017-09-20T11:53:53","SHT1X":{"Temperature":20.1,"Humidity":58.9},"HTU21":{"Temperature":20.7,"Humidity":58.5},"BMP280":{"Temperature":21.6,"Pressure":1020.3},"TempUnit":"C"}
 // tele/th1/SENSOR    {"Time":"2017-09-20T11:54:48","DS18B20":{"Temperature":49.7},"TempUnit":"C"}
 
-
-//  char jsonStr[MESSZ];
-//  strlcpy(jsonStr, json, sizeof(jsonStr));  // Save original before destruction by JsonObject
   String jsonStr = json;  // Move from stack to heap to fix watchdogs (20180626)
+  JsonParser parser((char*)jsonStr.c_str());
+  JsonParserObject root = parser.getRootObject();
+  if (root) {   // did JSON parsing went ok?
 
-  StaticJsonBuffer<1024> jsonBuf;
-  JsonObject &root = jsonBuf.parseObject(jsonStr);
-  if (root.success()) {
-
-    const char *unit;
-    unit = root[D_JSON_TEMPERATURE_UNIT];
+    const char *unit = root.getStr(PSTR(D_JSON_TEMPERATURE_UNIT), nullptr);   // nullptr if not found
     if (unit) {
       snprintf_P(disp_temp, sizeof(disp_temp), PSTR("%s"), unit);  // C or F
     }
-    unit = root[D_JSON_PRESSURE_UNIT];
+    unit = root.getStr(PSTR(D_JSON_PRESSURE_UNIT), nullptr);   // nullptr if not found
     if (unit) {
       snprintf_P(disp_pres, sizeof(disp_pres), PSTR("%s"), unit);  // hPa or mmHg
     }
-
-    for (JsonObject::iterator it = root.begin(); it != root.end(); ++it) {
-      JsonVariant value = it->value;
-      if (value.is<JsonObject>()) {
-        JsonObject& Object2 = value;
-        for (JsonObject::iterator it2 = Object2.begin(); it2 != Object2.end(); ++it2) {
-          JsonVariant value2 = it2->value;
-          if (value2.is<JsonObject>()) {
-            JsonObject& Object3 = value2;
-            for (JsonObject::iterator it3 = Object3.begin(); it3 != Object3.end(); ++it3) {
-              const char* value = it3->value;
-              if (value != nullptr) {  // "DHT11":{"Temperature":null,"Humidity":null} - ignore null as it will raise exception 28
-                DisplayJsonValue(topic, it->key, it3->key, value);  // Sensor 56%
+    for (auto key1 : root) {
+      JsonParserToken value1 = key1.getValue();
+      if (value1.isObject()) {
+        JsonParserObject Object2 = value1.getObject();
+        for (auto key2 : Object2) {
+          JsonParserToken value2 = key2.getValue();
+          if (value2.isObject()) {
+            JsonParserObject Object3 = value2.getObject();
+            for (auto key3 : Object3) {
+              const char* value3 = key3.getValue().getStr(nullptr);
+              if (value3 != nullptr) {  // "DHT11":{"Temperature":null,"Humidity":null} - ignore null as it will raise exception 28
+                DisplayJsonValue(topic, key1.getStr(), key3.getStr(), value3);  // Sensor 56%
               }
             }
           } else {
-            const char* value = it2->value;
+            const char* value = value2.getStr(nullptr);
             if (value != nullptr) {
-              DisplayJsonValue(topic, it->key, it2->key, value);  // Sensor  56%
+              DisplayJsonValue(topic, key1.getStr(), key2.getStr(), value);  // Sensor  56%
             }
           }
         }
       } else {
-        const char* value = it->value;
+        const char* value = value1.getStr(nullptr);
         if (value != nullptr) {
-          DisplayJsonValue(topic, it->key, it->key, value);  // Topic  56%
+          DisplayJsonValue(topic, key1.getStr(), key1.getStr(), value);  // Topic  56%
         }
       }
     }
@@ -1268,10 +1262,10 @@ bool DisplayMqttData(void)
 
 void DisplayLocalSensor(void)
 {
-  if ((Settings.display_mode &0x02) && (0 == tele_period)) {
+  if ((Settings.display_mode &0x02) && (0 == TasmotaGlobal.tele_period)) {
     char no_topic[1] = { 0 };
-//    DisplayAnalyzeJson(mqtt_topic, mqtt_data);  // Add local topic
-    DisplayAnalyzeJson(no_topic, mqtt_data);    // Discard any topic
+//    DisplayAnalyzeJson(TasmotaGlobal.mqtt_topic, TasmotaGlobal.mqtt_data);  // Add local topic
+    DisplayAnalyzeJson(no_topic, TasmotaGlobal.mqtt_data);    // Discard any topic
   }
 }
 
@@ -1291,16 +1285,16 @@ void DisplayInitDriver(void)
   }
 
 
-//  AddLog_P2(LOG_LEVEL_DEBUG, PSTR(D_LOG_DEBUG "Display model %d"), Settings.display_model);
+//  AddLog_P(LOG_LEVEL_DEBUG, PSTR(D_LOG_DEBUG "Display model %d"), Settings.display_model);
 
   if (Settings.display_model) {
-    devices_present++;
+    TasmotaGlobal.devices_present++;
     if (!PinUsed(GPIO_BACKLIGHT)) {
-      if (light_type && (4 == Settings.display_model)) {
-        devices_present--;  // Assume PWM channel is used for backlight
+      if (TasmotaGlobal.light_type && (4 == Settings.display_model)) {
+        TasmotaGlobal.devices_present--;  // Assume PWM channel is used for backlight
       }
     }
-    disp_device = devices_present;
+    disp_device = TasmotaGlobal.devices_present;
 
 #ifndef USE_DISPLAY_MODES1TO5
     Settings.display_mode = 0;
@@ -1314,7 +1308,7 @@ void DisplaySetPower(void)
 {
   disp_power = bitRead(XdrvMailbox.index, disp_device -1);
 
-//AddLog_P2(LOG_LEVEL_DEBUG, PSTR("DSP: Power %d"), disp_power);
+//AddLog_P(LOG_LEVEL_DEBUG, PSTR("DSP: Power %d"), disp_power);
 
   if (Settings.display_model) {
     if (!renderer) {
@@ -1345,7 +1339,7 @@ void CmndDisplayModel(void)
     uint32_t last_display_model = Settings.display_model;
     Settings.display_model = XdrvMailbox.payload;
     if (XdspCall(FUNC_DISPLAY_MODEL)) {
-      restart_flag = 2;  // Restart to re-init interface and add/Remove MQTT subscribe
+      TasmotaGlobal.restart_flag = 2;  // Restart to re-init interface and add/Remove MQTT subscribe
     } else {
       Settings.display_model = last_display_model;
     }
@@ -1358,7 +1352,7 @@ void CmndDisplayWidth(void)
   if (XdrvMailbox.payload > 0) {
     if (XdrvMailbox.payload != Settings.display_width) {
       Settings.display_width = XdrvMailbox.payload;
-      restart_flag = 2;  // Restart to re-init width
+      TasmotaGlobal.restart_flag = 2;  // Restart to re-init width
     }
   }
   ResponseCmndNumber(Settings.display_width);
@@ -1369,7 +1363,7 @@ void CmndDisplayHeight(void)
   if (XdrvMailbox.payload > 0) {
     if (XdrvMailbox.payload != Settings.display_height) {
       Settings.display_height = XdrvMailbox.payload;
-      restart_flag = 2;  // Restart to re-init height
+      TasmotaGlobal.restart_flag = 2;  // Restart to re-init height
     }
   }
   ResponseCmndNumber(Settings.display_height);
@@ -1390,7 +1384,7 @@ void CmndDisplayMode(void)
     Settings.display_mode = XdrvMailbox.payload;
 
     if (disp_subscribed != (Settings.display_mode &0x04)) {
-      restart_flag = 2;  // Restart to Add/Remove MQTT subscribe
+      TasmotaGlobal.restart_flag = 2;  // Restart to Add/Remove MQTT subscribe
     } else {
       if (last_display_mode && !Settings.display_mode) {  // Switch to mode 0
         DisplayInit(DISPLAY_INIT_MODE);
@@ -2095,8 +2089,8 @@ uint32_t Touch_Status(uint32_t sel) {
 
 
 #ifdef USE_TOUCH_BUTTONS
-void Touch_MQTT(uint8_t index, const char *cp) {
-  ResponseTime_P(PSTR(",\"FT5206\":{\"%s%d\":\"%d\"}}"), cp, index+1, buttons[index]->vpower.on_off);
+void Touch_MQTT(uint8_t index, const char *cp, uint32_t val) {
+  ResponseTime_P(PSTR(",\"FT5206\":{\"%s%d\":\"%d\"}}"), cp, index+1, val);
   MqttPublishTeleSensor();
 }
 
@@ -2105,6 +2099,10 @@ void Touch_RDW_BUTT(uint32_t count, uint32_t pwr) {
   if (pwr) buttons[count]->vpower.on_off = 1;
   else buttons[count]->vpower.on_off = 0;
 }
+
+#ifdef USE_M5STACK_CORE2
+uint8_t tbstate[3];
+#endif
 
 // check digitizer hit
 void Touch_Check(void(*rotconvert)(int16_t *x, int16_t *y)) {
@@ -2119,9 +2117,29 @@ uint8_t vbutt=0;
 
     if (renderer) {
 
+#ifdef USE_M5STACK_CORE2
+      // handle  3 built in touch buttons
+      uint16_t xcenter = 80;
+#define TDELTA 30
+#define TYPOS 275
+
+      for (uint32_t tbut = 0; tbut < 3; tbut++) {
+        if (pLoc.x>(xcenter-TDELTA) && pLoc.x<(xcenter+TDELTA) && pLoc.y>(TYPOS-TDELTA) && pLoc.y<(TYPOS+TDELTA)) {
+          // hit a button
+          if (!(tbstate[tbut] & 1)) {
+              // pressed
+              tbstate[tbut] |= 1;
+              //AddLog_P(LOG_LEVEL_INFO, PSTR("tbut: %d pressed"), tbut);
+              Touch_MQTT(tbut, "BIB", tbstate[tbut] & 1);
+          }
+        }
+        xcenter += 100;
+      }
+#endif
+
       rotconvert(&pLoc.x, &pLoc.y);
 
-      //AddLog_P2(LOG_LEVEL_INFO, PSTR("touch %d - %d"), pLoc.x, pLoc.y);
+      //AddLog_P(LOG_LEVEL_INFO, PSTR("touch %d - %d"), pLoc.x, pLoc.y);
       // now must compare with defined buttons
       for (uint8_t count=0; count<MAXBUTTONS; count++) {
         if (buttons[count] && !buttons[count]->vpower.disable) {
@@ -2130,7 +2148,7 @@ uint8_t vbutt=0;
                 buttons[count]->press(true);
                 if (buttons[count]->justPressed()) {
                   if (!buttons[count]->vpower.is_virtual) {
-                    uint8_t pwr=bitRead(power, rbutt);
+                    uint8_t pwr=bitRead(TasmotaGlobal.power, rbutt);
                     if (!SendKey(KEY_BUTTON, rbutt+1, POWER_TOGGLE)) {
                       ExecuteCommandPower(rbutt+1, POWER_TOGGLE, SRC_BUTTON);
                       Touch_RDW_BUTT(count, !pwr);
@@ -2148,7 +2166,7 @@ uint8_t vbutt=0;
                       cp="PBT";
                     }
                     buttons[count]->xdrawButton(buttons[count]->vpower.on_off);
-                    Touch_MQTT(count,cp);
+                    Touch_MQTT(count, cp, buttons[count]->vpower.on_off);
                   }
                 }
             }
@@ -2162,6 +2180,16 @@ uint8_t vbutt=0;
     }
   } else {
     // no hit
+#ifdef USE_M5STACK_CORE2
+    for (uint32_t tbut = 0; tbut < 3; tbut++) {
+      if (tbstate[tbut] & 1) {
+        // released
+        tbstate[tbut] &= 0xfe;
+        Touch_MQTT(tbut, "BIB", tbstate[tbut] & 1);
+        //AddLog_P(LOG_LEVEL_INFO, PSTR("tbut: %d released"), tbut);
+      }
+    }
+#endif
     for (uint8_t count=0; count<MAXBUTTONS; count++) {
       if (buttons[count]) {
         buttons[count]->press(false);
@@ -2170,14 +2198,14 @@ uint8_t vbutt=0;
             if (buttons[count]->vpower.is_pushbutton) {
               // push button
               buttons[count]->vpower.on_off = 0;
-              Touch_MQTT(count,"PBT");
+              Touch_MQTT(count,"PBT", buttons[count]->vpower.on_off);
               buttons[count]->xdrawButton(buttons[count]->vpower.on_off);
             }
           }
         }
         if (!buttons[count]->vpower.is_virtual) {
           // check if power button stage changed
-          uint8_t pwr = bitRead(power, rbutt);
+          uint8_t pwr = bitRead(TasmotaGlobal.power, rbutt);
           uint8_t vpwr = buttons[count]->vpower.on_off;
           if (pwr != vpwr) {
             Touch_RDW_BUTT(count, pwr);
@@ -2202,7 +2230,7 @@ bool Xdrv13(uint8_t function)
 {
   bool result = false;
 
-  if ((i2c_flg || spi_flg || soft_spi_flg) && XdspPresent()) {
+  if ((TasmotaGlobal.i2c_enabled || TasmotaGlobal.spi_enabled || TasmotaGlobal.soft_spi_enabled) && XdspPresent()) {
     switch (function) {
       case FUNC_PRE_INIT:
         DisplayInitDriver();
